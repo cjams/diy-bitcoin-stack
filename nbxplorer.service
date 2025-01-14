@@ -1,0 +1,16 @@
+[Unit]
+Description=NBXplorer daemon
+Requires=bitcoind.service
+After=bitcoind.service
+
+[Service]
+WorkingDirectory=@NBXPLORER_DIR@
+ExecStart=@NBXPLORER_DIR@/run.sh --conf=/etc/nbxplorer/nbxplorer.config
+User=@NBXPLORER_USR@
+Group=@NBXPLORER_GRP@
+Type=simple
+PIDFile=/run/nbxplorer/nbxplorer.pid
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

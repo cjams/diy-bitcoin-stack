@@ -1,0 +1,9 @@
+[Unit]
+Description=Mount external storage to /var/lib/bitcoind
+
+[Mount]
+What=@DEVICE@
+Where=/var/lib/bitcoind
+
+[Install]
+WantedBy=multi-user.target

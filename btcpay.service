@@ -1,0 +1,18 @@
+[Unit]
+Description=BTCPay Server
+Requires=nbxplorer.service
+After=nbxplorer.service
+
+[Service]
+WorkingDirectory=@BTCPAY_DIR@
+Environment=BTCPAY_BTCEXTERNALRTL="server=@BTCPAY_DOMAIN@/rtl;cookiefile=/var/lib/rtl/.cookie"
+ExecStart=@BTCPAY_DIR@/run.sh --conf=/etc/btcpay/btcpay.config --btcexplorercookiefile=@NBXPLORER_COOKIE@
+User=@BTCPAY_USR@
+Group=@BTCPAY_GRP@
+Type=simple
+PIDFile=/run/btcpayserver/btcpayserver.pid
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+

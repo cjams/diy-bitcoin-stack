@@ -1,0 +1,18 @@
+[Unit]
+Description=Ride The Lightning
+Requires=lnd.service
+After=lnd.service
+
+[Service]
+Environment="RTL_CONFIG_PATH=/var/lib/rtl"
+WorkingDirectory=/var/lib/rtl
+ExecStart=/usr/bin/node @RTL_SRC_PATH@/rtl
+User=@RTL_USR@
+Group=@RTL_GRP@
+Type=simple
+PIDFile=/run/rtl/rtl.pid
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+

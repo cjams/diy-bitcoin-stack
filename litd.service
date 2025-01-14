@@ -1,0 +1,21 @@
+[Unit]
+Description=Lightning Terminal Daemon
+Requires=lnd.service
+After=lnd.service
+
+[Service]
+ExecStart=@LITD_BIN@ --uipassword=@LITD_PASS@ --lnd-mode=remote --remote.lnd.macaroonpath=@LND_MACAROON_PATH@ --remote.lnd.tlscertpath=@LND_TLS_PATH@
+
+User=@LITD_USR@
+Group=@LITD_GRP@
+
+Type=simple
+KillMode=process
+TimeoutStartSec=60
+TimeoutStopSec=60
+Restart=always
+RestartSec=60
+
+[Install]
+WantedBy=multi-user.target
+

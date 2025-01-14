@@ -1,0 +1,23 @@
+[Unit]
+Description=LND Lightning Network Daemon
+Requires=bitcoind.service
+After=bitcoind.service
+
+[Service]
+ExecStart=@LND_BIN@ --configfile=@LND_CONFIG@
+ExecStop=@LNCLI_BIN@ --lnddir @LND_DATADIR@ stop
+PIDFile=/run/lnd/lnd.pid
+
+User=@LND_USR@
+Group=@LND_GRP@
+
+Type=simple
+KillMode=process
+TimeoutStartSec=60
+TimeoutStopSec=60
+Restart=always
+RestartSec=60
+
+[Install]
+WantedBy=multi-user.target
+
