@@ -135,7 +135,7 @@ cp -v lnd-linux-amd64-$release/lnd /usr/bin/
 cp -v lnd-linux-amd64-$release/lncli /usr/bin/
 
 mkdir -p /home/lnd/.lnd
-cp -v $HOME/dotfiles/lnd.conf /home/lnd/.lnd/
+cp -v $HOME/bitcoin-scripts/lnd.conf /home/lnd/.lnd/
 sed -i "s|; alias=@LND_ALIAS@|alias=@LND_ALIAS@|g" /home/lnd/.lnd/lnd.conf
 sed -i "s|@LND_ALIAS@|$lnd_alias|g" /home/lnd/.lnd/lnd.conf
 sed -i "s|; listen=localhost|listen=localhost|g" /home/lnd/.lnd/lnd.conf
@@ -150,7 +150,7 @@ sed -i "s|; tor.v3=true|tor.v3=true|g" /home/lnd/.lnd/lnd.conf
 sed -i "s|; tor.privatekeypath=|tor.privatekeypath=~/.lnd/v3_onion_private_key|g" /home/lnd/.lnd/lnd.conf
 sed -i "s|; tor.encryptkey=false|tor.encryptkey=true|g" /home/lnd/.lnd/lnd.conf
 
-sudo cp -v $HOME/dotfiles/lnd.service /etc/systemd/system/
+sudo cp -v $HOME/bitcoin-scripts/lnd.service /etc/systemd/system/
 
 lnd_bin=/usr/bin/lnd
 lncli_bin=/usr/bin/lncli

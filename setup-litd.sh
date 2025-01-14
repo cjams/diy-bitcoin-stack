@@ -114,7 +114,7 @@ litd_bin=$HOME/litd/lightning-terminal-linux-amd64-$release/litd
 lnd_macaroon_path=/home/lnd/.lnd/data/chain/bitcoin/mainnet/admin.macaroon
 lnd_tls_path=/home/lnd/.lnd/tls.cert
 
-sudo cp -v $HOME/dotfiles/litd.service /etc/systemd/system/
+sudo cp -v $HOME/bitcoin-scripts/litd.service /etc/systemd/system/
 sudo sed -i "s|@LITD_BIN@|$litd_bin|g" /etc/systemd/system/litd.service
 sudo sed -i "s|@LITD_USR@|$litd_usr|g" /etc/systemd/system/litd.service
 sudo sed -i "s|@LITD_GRP@|$litd_grp|g" /etc/systemd/system/litd.service

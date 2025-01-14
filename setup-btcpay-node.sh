@@ -64,7 +64,7 @@ for arg in "$@"; do
   fi
 done
 
-dir="$HOME/dotfiles"
+dir="$HOME/bitcoin-scripts"
 
 # Create btcpay user:group
 group_check=$(getent group btcpay)

@@ -64,7 +64,7 @@ for arg in "$@"; do
   fi
 done
 
-dir="$HOME/dotfiles"
+dir="$HOME/bitcoin-scripts"
 
 sudo apt update
 sudo apt install -y zsh vim silversearcher-ag libzmq3-dev

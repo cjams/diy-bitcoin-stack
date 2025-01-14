@@ -16,7 +16,7 @@ sudo mkdir /etc/electrs
 sudo chmod 0750 /var/lib/electrs
 sudo chmod 0750 /etc/electrs
 
-cd $HOME/dotfiles
+cd $HOME/bitcoin-scripts
 sudo cp -v electrs.conf /etc/electrs/config.toml
 sudo chown -R electrs:electrs /etc/electrs
 sudo chown -R electrs:electrs /var/lib/electrs

@@ -64,7 +64,7 @@ sudo chown rtl:rtl -R .
 sudo -u rtl npm install --omit=dev --legacy-peer-deps
 
 sudo mkdir -p /var/lib/rtl
-sudo cp $HOME/dotfiles/RTL-Config.json /var/lib/rtl
+sudo cp $HOME/bitcoin-scripts/RTL-Config.json /var/lib/rtl
 sudo chown rtl:rtl -R /var/lib/rtl
 sudo chmod 640 /var/lib/rtl/RTL-Config.json
 
@@ -77,7 +77,7 @@ sed -i "s|@LND_MACAROON_PATH@|$lnd_macaroon_path|g" /var/lib/rtl/RTL-Config.json
 sed -i "s|@LND_CONFIG_PATH@|$lnd_config_path|g" /var/lib/rtl/RTL-Config.json
 sed -i "s|@RTL_SRC_PATH@|$rtl_src_path|g" /var/lib/rtl/RTL-Config.json
 
-sudo cp -v $HOME/dotfiles/rtl.service /etc/systemd/system/
+sudo cp -v $HOME/bitcoin-scripts/rtl.service /etc/systemd/system/
 sudo sed -i "s|@RTL_SRC_PATH@|$rtl_src_path|g" /etc/systemd/system/rtl.service
 sudo sed -i "s|@RTL_USR@|rtl|g" /etc/systemd/system/rtl.service
 sudo sed -i "s|@RTL_GRP@|rtl|g" /etc/systemd/system/rtl.service
