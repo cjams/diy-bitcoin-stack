@@ -1,0 +1,15 @@
+[Unit]
+Description=Nostr Wallet Connect for LND
+Requires=lnd.service
+After=lnd.service
+
+[Service]
+Environment=RUST_LOG=info
+ExecStart=/usr/local/bin/nostr-wallet-connect-lnd --relay wss://relay.damus.io --macaroon-file /home/lnd/.lnd/data/chain/bitcoin/mainnet/admin.macaroon --cert-file /home/lnd/.lnd/tls.cert --keys-file @KEYS_FILE@
+Type=simple
+User=@NWC_USR@
+Group=@NWC_GRP@
+
+[Install]
+WantedBy=multi-user.target
+
