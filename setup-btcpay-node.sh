@@ -163,7 +163,6 @@ sudo systemctl enable --now btcpay
 
 # Setup SSH Tunnel
 btcpay_port=23000
-rtl_port=3000
 
 sudo apt install autossh
 sudo cp $dir/autossh-tunnel.service /etc/systemd/system/
@@ -171,7 +170,6 @@ sudo cp $dir/autossh-tunnel.service /etc/systemd/system/
 sudo sed -i "s|@BTCPAY_PROXY_HOST@|$proxy_host|g" /etc/systemd/system/autossh-tunnel.service
 sudo sed -i "s|@BTCPAY_PROXY_USR@|$proxy_user|g" /etc/systemd/system/autossh-tunnel.service
 sudo sed -i "s|@BTCPAY_PORT@|$btcpay_port|g" /etc/systemd/system/autossh-tunnel.service
-sudo sed -i "s|@RTL_PORT@|$rtl_port|g" /etc/systemd/system/autossh-tunnel.service
 sudo sed -i "s|@AUTOSSH_USR@|$USER|g" /etc/systemd/system/autossh-tunnel.service
 sudo sed -i "s|@AUTOSSH_GRP@|$USER|g" /etc/systemd/system/autossh-tunnel.service
 
