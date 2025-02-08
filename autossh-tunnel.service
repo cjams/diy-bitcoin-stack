@@ -6,7 +6,7 @@ After=network.target
 User=@AUTOSSH_USR@
 Group=@AUTOSSH_GRP@
 Environment="AUTOSSH_GATETIME=0"
-ExecStart=/usr/bin/autossh -M 0 -v -N -o "ServerAliveInterval=60" -R @BTCPAY_PORT@:localhost:@BTCPAY_PORT@ -R @RTL_PORT@:localhost:@RTL_PORT@ @BTCPAY_PROXY_USR@@@BTCPAY_PROXY_HOST@
+ExecStart=/usr/bin/autossh -M 0 -v -N -o "ServerAliveInterval=60" -o "ExitOnForwardFailure=yes" -R 23000:localhost:23000 @BTCPAY_PROXY_USR@@@BTCPAY_PROXY_HOST@
 StandardOutput=journal
 
 [Install]
