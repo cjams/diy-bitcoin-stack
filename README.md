@@ -23,5 +23,6 @@ Here is a diagram I made that details the various connections:
 The digram is interactive. Open this link: https://drive.google.com/file/d/11hgeRHMyvI3baJxWuDpd3M5xtuC8mmmb/view?usp=sharing
 in draw.io and click on the green buttons in the bottom left to see what the various flows are through the stack for various 
 use cases. If you don't have gmail or drawio, you can also open the [html file](https://github.com/cjams/diy-bitcoin-stack/blob/main/btc-setup.drawio.html)
-in a browser and interact with it that way.
+in a browser and interact with it that way. Note that the FLOW VIEW buttons are oriented towards Bob. In other words, this 
+is "Bob's" self-hosted stack and Alice may be someone on the Internet, nostr, etc.
 
