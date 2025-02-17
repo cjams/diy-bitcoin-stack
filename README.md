@@ -22,5 +22,5 @@ Here is a diagram I made that details the various connections:
 
 The digram is interactive. Open this link: https://drive.google.com/file/d/11hgeRHMyvI3baJxWuDpd3M5xtuC8mmmb/view?usp=sharing
 in draw.io and click on the green buttons in the bottom left to see what the various flows are through the stack for various 
-use cases. If you don't have gmail, you can also use the (html file)[btc-setup.drawio.html]
+use cases. If you don't have gmail or drawio, you can also use the [html file directly](https://github.com/cjams/diy-bitcoin-stack/blob/main/btc-setup.drawio.html)
 
