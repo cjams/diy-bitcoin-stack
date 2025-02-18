@@ -26,3 +26,7 @@ use cases. If you don't have gmail or drawio, you can also open the [html file](
 in a browser and interact with it that way. Note that the FLOW VIEW buttons are oriented towards Bob. In other words, this 
 is "Bob's" self-hosted stack and Alice may be someone on the Internet, nostr, etc.
 
+
+
+https://github.com/user-attachments/assets/e90c60ba-c191-42c7-9b33-b48250f46e9d
+
