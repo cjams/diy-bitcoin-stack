@@ -1,0 +1,13 @@
+[Unit]
+Description=Telegram Alarm for DIY Bitcoin Stack
+After=network.target
+
+[Service]
+Type=simple
+User=YOUR_USERNAME
+ExecStart=/usr/bin/python3 ALARM_PATH
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
