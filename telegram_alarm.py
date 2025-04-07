@@ -305,6 +305,76 @@ def check_systemd_services(bot_token, chat_id, systemd_state):
         
     return systemd_state
 
+def check_btcpay_health(bot_token, chat_id, btcpay_view_api_key, btcpay_server_url):
+    """Check BTCPay Server health endpoint and send alert if health check fails.
+    
+    Makes a GET request to the BTCPay Server health endpoint and monitors if it's synchronized.
+    Sends a Telegram alert if the health check fails or shows not synchronized.
+    """
+    try:
+        if not btcpay_server_url:
+            logger.error("BTCPay Server URL not configured in config.json")
+            return
+        
+        # Ensure URL ends with a slash for consistent path joining
+        if not btcpay_server_url.endswith('/'):
+            btcpay_server_url += '/'
+            
+        # Make request to health endpoint
+        health_url = f"{btcpay_server_url}api/v1/health"
+        headers = {}
+        
+        # Add API key if provided
+        if btcpay_view_api_key:
+            headers['Authorization'] = f"token {btcpay_view_api_key}"
+        
+        response = requests.get(health_url, headers=headers, timeout=10)
+        
+        # Check if response is successful (status code 200)
+        if response.status_code != 200:
+            error_message = f"🚨 *ALERT: BTCPay Server Health Check Failed*\n"
+            error_message += f"Status Code: `{response.status_code}`\n"
+            error_message += f"Response: `{response.text[:256]}`\n"  # Truncate large responses
+            error_message += f"Time: `{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}`"
+            
+            logger.error(f"BTCPay health check failed: Status {response.status_code}")
+            send_telegram_message(bot_token, chat_id, error_message)
+            return
+            
+        # Try to parse JSON response
+        try:
+            health_data = response.json()
+            
+            # Check if the server is synchronized
+            if not health_data.get('synchronized', False):
+                error_message = f"🚨 *ALERT: BTCPay Server Not Synchronized*\n"
+                error_message += f"Health Status: `{json.dumps(health_data, indent=2)}`\n"
+                error_message += f"Time: `{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}`"
+                
+                logger.error(f"BTCPay server not synchronized: {health_data}")
+                send_telegram_message(bot_token, chat_id, error_message)
+                
+        except json.JSONDecodeError:
+            # Response is not valid JSON
+            error_message = f"🚨 *ALERT: BTCPay Server Health Check Failed*\n"
+            error_message += f"Response not valid JSON\n"
+            error_message += f"Response: `{response.text[:500]}`\n"  # Truncate large responses
+            error_message += f"Time: `{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}`"
+            
+            logger.error(f"BTCPay health check returned non-JSON response: {response.text}")
+            send_telegram_message(bot_token, chat_id, error_message)
+                
+    except requests.exceptions.RequestException as e:
+        # Handle network errors, timeouts, etc.
+        error_message = f"🚨 *ALERT: BTCPay Server Health Check Failed*\n"
+        error_message += f"Connection Error: `{str(e)}`\n"
+        error_message += f"Time: `{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}`"
+        
+        logger.error(f"Error connecting to BTCPay health endpoint: {e}")
+        send_telegram_message(bot_token, chat_id, error_message)
+    except Exception as e:
+        logger.error(f"Unexpected error checking BTCPay health: {e}")
+
 def check_lnd_payment_rx(bot_token, chat_id):
     try:
         # Calculate timestamp for 90 seconds ago
@@ -314,7 +384,7 @@ def check_lnd_payment_rx(bot_token, chat_id):
         # Run journalctl command with --since argument
         result = subprocess.run(
             [
-                'sudo', 'journalctl', '-u', 'lnd', '-r',
+                'journalctl', '-u', 'lnd', '-r',
                 '--grep', "Sent 0 satoshis and received [1-9][0-9]* satoshis",
                 '--since', since_time
              ],
@@ -322,13 +392,24 @@ def check_lnd_payment_rx(bot_token, chat_id):
             text=True,
             check=False
         )
-        
-        if result.returncode != 0:
+
+        if result.returncode != 0 and result.stderr:
             logger.error(f"Error checking LND payments: {result.stderr}")
+
+            output = result.stderr
+            send_telegram_message(
+                bot_token,
+                chat_id,
+                f"🚨 *ALERT: LND payment check failed 1*\n"    
+                f"```\n{output}\n```\n"
+                f"Time: `{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}`"
+            )
+
             return
-        
+
+
         output = result.stdout.strip()
-        
+
         # Process output and send notification if payments were received
         if output != '-- No entries --':
             logger.info(f"LND payment received: {output}")
@@ -341,7 +422,12 @@ def check_lnd_payment_rx(bot_token, chat_id):
             )
     except Exception as e:
         logger.error(f"Error checking LND payments: {e}")
-
+        send_telegram_message(
+            bot_token,
+            chat_id,
+            f"🚨 *ALERT: LND payment check failed 2*\n"    
+            f"Time: `{datetime.now().strftime('%Y-%m-%d %H:%M:%S')}`"
+        )
 
 def main():
     """Main function to monitor service and send alerts."""
@@ -351,6 +437,8 @@ def main():
     check_interval = config.get('check_interval', 60)  # seconds
     systemd_services = config.get('systemd_services', [])
     enable_mullvad = config.get('enable_mullvad_monitoring', True)
+    btcpay_view_api_key = config.get('btcpay_view_api_key', "")
+    btcpay_server_url = config.get('btcpay_server_url', "")
     
     if not bot_token or not chat_id:
         logger.error("Telegram bot token or chat ID not configured.")
@@ -380,6 +468,8 @@ def main():
 
         # Check for LND payments
         check_lnd_payment_rx(bot_token, chat_id)
+        
+        check_btcpay_health(bot_token, chat_id, btcpay_view_api_key, btcpay_server_url)
 
         # Sleep for the specified interval
         time.sleep(check_interval)
